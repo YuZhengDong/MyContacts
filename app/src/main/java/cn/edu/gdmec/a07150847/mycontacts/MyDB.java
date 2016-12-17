@@ -14,12 +14,21 @@ public  class MyDB extends SQLiteOpenHelper {
     private  static  int DB_VERSION =2;
     private SQLiteDatabase db;
 
-   public MyDB(Context context){
+    public MyDB(Context context){
         super(context,DB_NAME,null,DB_VERSION);
         db=getWritableDatabase();
     }
 
 
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
 
     public SQLiteDatabase openConnection(){
         if(!db.isOpen()) {
@@ -28,7 +37,6 @@ public  class MyDB extends SQLiteOpenHelper {
         }
         return db;
     }
-
 
 
     public void closeConnection(){
@@ -42,12 +50,12 @@ public  class MyDB extends SQLiteOpenHelper {
     }
 
 
-
     public boolean createTable(String createTableSql){
         try {
             openConnection();
             db.execSQL(createTableSql);
         }catch (Exception ex){
+            ex.printStackTrace();
             return false;
         }finally {
             closeConnection();
@@ -56,32 +64,30 @@ public  class MyDB extends SQLiteOpenHelper {
         return true;
     }
 
-
-   public boolean save(String tableName, ContentValues values){
-    try {
-        openConnection();
-        db.insert(tableName,null,values);
-    }catch (Exception ex){
-        ex.printStackTrace();
-        return false;
-    }finally {
-        closeConnection();
-    }
+    public boolean save(String tableName, ContentValues values){
+        try {
+            openConnection();
+            db.insert(tableName,null,values);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }finally {
+            closeConnection();
+        }
         return true;
 
     }
 
-
     public boolean update(String table,ContentValues values,String whereClause,String []whereArgs){
-       try {
-           openConnection();
-           db.update(table, values, whereClause, whereArgs);
-       }catch (Exception ex){
-           ex.printStackTrace();
-           return false;
-       }finally {
-           closeConnection();
-       }
+        try {
+            openConnection();
+            db.update(table, values, whereClause, whereArgs);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }finally {
+            closeConnection();
+        }
         return true;
     }
 
@@ -99,8 +105,7 @@ public  class MyDB extends SQLiteOpenHelper {
 
     }
 
-
-    public Cursor find(String findSql,String []obj){
+    public Cursor find(String findSql, String []obj){
         try {
             openConnection();
             Cursor cursor = db.rawQuery(findSql,obj);
@@ -108,8 +113,6 @@ public  class MyDB extends SQLiteOpenHelper {
 
         }catch (Exception ex){
             ex.printStackTrace();
-        }finally {
-            closeConnection();
             return null;
         }
 
@@ -125,18 +128,38 @@ public  class MyDB extends SQLiteOpenHelper {
             ex.printStackTrace();
             return false;
         }
-            return true;
+        return true;
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
 
-    }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
